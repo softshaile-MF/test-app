@@ -8,3 +8,8 @@ variable "bucket_name" {
   type        = string
   default     = "s3-static-app-240042023"
 }
+
+variable "marketing-users" {
+  type = list(string)
+  default = ["Alice", "Malory"]
+}
