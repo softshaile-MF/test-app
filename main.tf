@@ -33,4 +33,20 @@ resource "aws_s3_bucket_policy" "static-site-bucket" {
   policy = data.aws_iam_policy_document.static-site-policy.json
 }
 
+resource "aws_s3_object" "static-site-objects" {
+  for_each = fileset("${path.module}/tech-test", "**/*.html")
+  bucket = aws_s3_bucket.static-site-bucket.id
+  key    = each.value
+  source = "${path.module}/tech-test/${each.value}"
+  content_type = "text/html" 
+}
 
+resource "aws_s3_bucket_website_configuration" "static-site-config" {
+  bucket = aws_s3_bucket.static-site-bucket.id
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "error.html"
+  }
+}
