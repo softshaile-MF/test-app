@@ -15,9 +15,9 @@ data "aws_iam_policy_document" "static-site-policy" {
 }
 
 data "aws_iam_policy_document" "marketing-policy" {
-version = "2012-10-17"
-  statement  {
-    sid = "BucketList"
+  version = "2012-10-17"
+  statement {
+    sid    = "BucketList"
     effect = "Allow"
     actions = [
       "s3:ListAllMyBuckets",
@@ -25,11 +25,11 @@ version = "2012-10-17"
       "s3:GetBucketLocation"
     ]
     resources = [
-        "*"
+      "*"
     ]
   }
-    statement  {
-    sid = "S3Upload"
+  statement {
+    sid    = "S3Upload"
     effect = "Allow"
     actions = [
       "s3:GetObject",
@@ -39,13 +39,13 @@ version = "2012-10-17"
       "arn:aws:s3:::${var.bucket_name}/news/*"
     ]
   }
-  
+
 }
 
 data "aws_iam_policy_document" "all-access-to-bucket" {
-version = "2012-10-17"
-statement  {
-    sid = "BucketList"
+  version = "2012-10-17"
+  statement {
+    sid    = "BucketList"
     effect = "Allow"
     actions = [
       "s3:ListAllMyBuckets",
@@ -53,25 +53,25 @@ statement  {
       "s3:GetBucketVersioning"
     ]
     resources = [
-        "*"
+      "*"
     ]
   }
-  statement  {
-    sid = "AllowAllInBucket"
+  statement {
+    sid    = "AllowAllInBucket"
     effect = "Allow"
     actions = [
       "s3:*"
     ]
     resources = [
-        "arn:aws:s3:::${var.bucket_name}/*"
+      "arn:aws:s3:::${var.bucket_name}/*"
     ]
   }
 }
 
 data "aws_iam_policy_document" "hr" {
-version = "2012-10-17"
-statement  {
-    sid = "BucketList"
+  version = "2012-10-17"
+  statement {
+    sid    = "BucketList"
     effect = "Allow"
     actions = [
       "s3:ListAllMyBuckets",
@@ -79,18 +79,18 @@ statement  {
       "s3:ListBucket",
     ]
     resources = [
-        "*"
+      "*"
     ]
   }
-    statement  {
-    sid = "AllowUserUpdatePeopleFile"
+  statement {
+    sid    = "AllowUserUpdatePeopleFile"
     effect = "Allow"
     actions = [
       "s3:GetObject",
       "s3:PutObject"
     ]
     resources = [
-       "arn:aws:s3:::${var.bucket_name}/people.html"
+      "arn:aws:s3:::${var.bucket_name}/people.html"
     ]
   }
 }

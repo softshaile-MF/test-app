@@ -10,6 +10,6 @@ variable "bucket_name" {
 }
 
 variable "marketing-users" {
-  type = list(string)
+  type    = list(string)
   default = ["Alice", "Malory"]
 }

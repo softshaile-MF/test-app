@@ -47,11 +47,11 @@ resource "aws_s3_bucket_policy" "static-site-bucket" {
 
 ## Upload static object contents
 resource "aws_s3_object" "static-site-objects" {
-  for_each = fileset("${path.module}/tech-test", "**/*.html")
-  bucket = aws_s3_bucket.static-site-bucket.id
-  key    = each.value
-  source = "${path.module}/tech-test/${each.value}"
-  content_type = "text/html" 
+  for_each     = fileset("${path.module}/tech-test", "**/*.html")
+  bucket       = aws_s3_bucket.static-site-bucket.id
+  key          = each.value
+  source       = "${path.module}/tech-test/${each.value}"
+  content_type = "text/html"
 }
 
 ## Static website related configuraiton
@@ -82,7 +82,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encrypt" {
 ## Setting up the marketing users
 resource "aws_iam_user" "marketing-users" {
   count = length(var.marketing-users)
-  name = var.marketing-users[count.index]
+  name  = var.marketing-users[count.index]
 }
 
 ## Setting up the marketing group
@@ -94,15 +94,15 @@ resource "aws_iam_group" "marketing-group" {
 
 ## Setting up the group level policy
 resource "aws_iam_group_policy" "marketing-group-policy" {
-  name  = "MarketingS3Policy"
-  group = aws_iam_group.marketing-group.name
+  name   = "MarketingS3Policy"
+  group  = aws_iam_group.marketing-group.name
   policy = data.aws_iam_policy_document.marketing-policy.json
 }
 
 
 ## Setting up the group and user relationship
 resource "aws_iam_group_membership" "marketing-group-membership" {
-  name = "marketing-group-membership"
+  name  = "marketing-group-membership"
   count = length(aws_iam_user.marketing-users)
   users = [
     aws_iam_user.marketing-users[0].name,
@@ -123,8 +123,8 @@ resource "aws_iam_group" "content-editors-group" {
 
 ## Setting up the group level policy
 resource "aws_iam_group_policy" "content-editors-group-policy" {
-  name  = "ContentEditorsS3Policy"
-  group = aws_iam_group.content-editors-group.name
+  name   = "ContentEditorsS3Policy"
+  group  = aws_iam_group.content-editors-group.name
   policy = data.aws_iam_policy_document.all-access-to-bucket.json
 }
 
@@ -157,8 +157,8 @@ resource "aws_iam_group_membership" "hr-group-membership" {
 }
 
 resource "aws_iam_group_policy" "hr-group-policy" {
-  name  = "HRS3Policy"
-  group = aws_iam_group.hr-group.name
+  name   = "HRS3Policy"
+  group  = aws_iam_group.hr-group.name
   policy = data.aws_iam_policy_document.hr.json
 }
 
@@ -173,15 +173,15 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   default_root_object = "index.html"
 
   custom_error_response {
-    error_code = "404"
+    error_code         = "404"
     response_page_path = "/error.html"
-    response_code = "404"
+    response_code      = "404"
   }
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = var.bucket_name
-    
+
     forwarded_values {
       query_string = false
 
