@@ -1,4 +1,7 @@
 ## S3 bucket for static website
+
+
+
 resource "aws_s3_bucket" "static-site-bucket" {
   bucket = var.bucket_name
   #checkov:skip=CKV2_AWS_62: "Ensure S3 buckets should have event notifications enabled"
