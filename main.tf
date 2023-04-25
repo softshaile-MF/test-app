@@ -3,6 +3,13 @@ resource "aws_s3_bucket" "static-site-bucket" {
   bucket = var.bucket_name
 }
 
+resource "aws_s3_bucket_versioning" "static-site-bucket-versioning" {
+  bucket = aws_s3_bucket.static-site-bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 ## S3 bucket configuration related to ownership
 resource "aws_s3_bucket_ownership_controls" "static-site-bucket" {
   bucket = aws_s3_bucket.static-site-bucket.id
