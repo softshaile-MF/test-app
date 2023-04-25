@@ -4,7 +4,7 @@ data "aws_iam_policy_document" "static-site-policy" {
       "s3:GetObject"
     ]
     principals {
-      identifiers = ["*"]
+      identifiers = ["781526523032"]
       type        = "AWS"
     }
     resources = [

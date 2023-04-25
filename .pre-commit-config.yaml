@@ -1,0 +1,20 @@
+repos:
+- repo: git@github.com:antonbabenko/pre-commit-terraform.git
+  rev: v1.76.0
+  hooks:
+    - id: terraform_fmt
+    - id: terraform_tflint
+      args:
+        - --args=--disable-rule=terraform_required_providers
+        - --args=--disable-rule=terraform_typed_variables
+        - --args=--disable-rule=terraform_deprecated_index
+        - --args=--disable-rule=terraform_unused_declarations
+        - --args=--disable-rule=terraform_required_version
+        - --args=--disable-rule=terraform_deprecated_interpolation
+        - --args=--disable-rule=terraform_empty_list_equality
+    - id: terraform_checkov
+    - id: terraform_docs
+      args:
+        - --hook-config=--path-to-file=README.md
+        - --hook-config=--add-to-existing-file=true
+        - --hook-config=--create-file-if-not-exist=true
