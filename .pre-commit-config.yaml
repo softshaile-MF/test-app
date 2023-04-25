@@ -12,6 +12,7 @@ repos:
         - --args=--disable-rule=terraform_required_version
         - --args=--disable-rule=terraform_deprecated_interpolation
         - --args=--disable-rule=terraform_empty_list_equality
+    - id: terraform_tfsec
     - id: terraform_checkov
     - id: terraform_docs
       args:
