@@ -12,6 +12,7 @@ terraform {
     region         = "us-east-1"
     dynamodb_table = "terraform-locks"
     encrypt        = true
+    profile        = "aws-tf-profile"
   }
 
 
@@ -19,6 +20,6 @@ terraform {
 }
 
 provider "aws" {
-  region  = var.region
-  profile = "aws-terraform-profile"
+  region  = "us-east-1"
+  profile = "aws-tf-profile"
 }
