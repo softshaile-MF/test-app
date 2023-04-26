@@ -1,4 +1,5 @@
 variable "region" {
+  description = "AWS Region for resourcess "
   type    = string
 }
 
@@ -8,5 +9,6 @@ variable "bucket_name" {
 }
 
 variable "marketing-users" {
+  description = "List of Marketing users"
   type    = list(string)
 }
