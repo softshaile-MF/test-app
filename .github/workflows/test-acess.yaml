@@ -1,0 +1,78 @@
+name: S3 Website Access Test
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test-access:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Content editor should be able to add and delete files to entire website
+        run: |
+          touch test.html
+          if aws s3 cp test.html s3://<bucket-name>/ --recursive --profile Bobby; then
+            echo "Bobby has access to upload files to S3 bucket"
+          else
+            echo "Bobby does not have access to upload files to S3 bucket"
+            exit 1
+          fi
+
+          if aws s3 rm test.html s3://<bucket-name>/  --profile Bobby; then
+            echo "Bobby has access to deletes files from S3 bucket"
+          else
+            echo "Bobby does not have access to delete files from S3 bucket"
+            exit 1
+          fi
+
+      - name: HR should be able to edit people.html
+        run: |
+          aws s3 cp s3://your-bucket-name/people.html .
+          echo "new content" > people.html
+          if ! aws s3 cp your-file.txt s3://your-bucket-name/people.html --profile Charlie; then
+            echo "Error: Charlie does not have permission to edit /people.html in the S3 bucket."
+            exit 1
+          else
+            echo "Charlie has access to update /people.html bucket"
+          fi
+
+      - name: Marketing employee should be able to upload news
+        run: |
+          touch article3.html
+          if aws s3 cp article3.html s3://<bucket-name>/news/ --recursive --profile Alice; then
+            echo "Alice has access to upload files to news section"
+          else
+            echo "Alice has access to upload files to news section"
+            exit 1
+          fi
+          if aws s3 cp article3.html s3://<bucket-name>/news/ --recursive --profile Malory; then
+            echo "Malory has access to upload files to news section"
+          else
+            echo "Malory has access to upload files to news section"
+            exit 1
+          fi
+
+      - name: Marketing employee should not delete the articles from news section
+        run: |
+          if aws s3 rm article2.html s3://<bucket-name>/news/ --profile Alice; then
+            echo "Error: Alice is able remove the articlaes from news section"
+            exit 1
+          else
+            echo "Alice is unable to remove any contents from news section"
+          fi
+
+          if aws s3 rm article2.html s3://<bucket-name>/news/ --profile Malory; then
+            echo "Error: Malory is able remove the articlaes from news section"
+            exit 1
+          else
+            echo "Malory is unable to remove any contents from news section"
+          fi
+

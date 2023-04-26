@@ -1,3 +1,9 @@
+
+data "aws_caller_identity" "current" {}
+
+locals {
+    account_id    = data.aws_caller_identity.current.account_id
+}
 ## S3 bucket for static website
 module "s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
