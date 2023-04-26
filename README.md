@@ -1,10 +1,38 @@
 # Test-App Website
 
-Publishes web content using S3 , and creates IAM users, groups and policies.
+Publishes web content using S3.
 
-## Setup
+## Prerequisites
 
-To setup and configure this project we need an AWS account
+* AWS account
+* Terraform
+* Added precommit with hooks
+
+# Overview
+
+Static Website hosted on S3 service
+
+# Website
+
+Creates an S3 bucket for storing the website files. Utilised "github.com/terraform-aws-modules/terraform-aws-s3-bucket" module .
+
+# Website Hosting Configuration
+
+The aws_s3_bucket_website resource block enables website hosting for the S3 bucket created above. It specifies the default index document and error document to use when a user requests the root URL of the bucket and encounters an error, respectively.
+
+# IAM Policies and Users
+
+The script creates three IAM policies to allow different groups of users to access and modify the website files in different ways. The policies are defined using JSON-encoded strings that specify a set of statements, each containing an effect (either "Allow" or "Deny"), a list of actions, and a list of resources.
+
+# Marketing Policy
+
+The aws_iam_policy.marketing_policy resource block creates an IAM policy that allows users to read and write to the entire S3 bucket, but only if the objects are marked with a public-read ACL.
+
+# Content Editor Policy
+
+The aws_iam_policy.content_editor_policy resource block creates an IAM policy that allows users to read and write to the entire S3 bucket.
+
+---
 
 ## Requirements
 
@@ -68,29 +96,31 @@ No outputs.
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.64.0 |
+|  [terraform](#requirement\_terraform) | >= 1.3.0 |
+|  [aws](#requirement\_aws) | ~> 4.64.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.64.0 |
+|  [aws](#provider\_aws) | 4.64.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | 3.8.2 |
+|  [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | 3.8.2 |
 
 ## Resources
 
 | Name | Type |
 |------|------|
+| [aws_cloudfront_distribution.s3_distribution](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution) | resource |
 | [aws_iam_group.content-editors-group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_group) | resource |
 | [aws_iam_group.hr-group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_group) | resource |
 | [aws_iam_group.marketing-group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_group) | resource |
@@ -114,11 +144,17 @@ No outputs.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | S3 static site domain name | `string` | `"s3-static-app-240042023"` | no |
-| <a name="input_marketing-users"></a> [marketing-users](#input\_marketing-users) | n/a | `list(string)` | <pre>[<br>  "Alice",<br>  "Malory"<br>]</pre> | no |
-| <a name="input_region"></a> [region](#input\_region) | n/a | `string` | `"us-east-1"` | no |
+|  [bucket\_name](#input\_bucket\_name) | S3 static site domain name | `string` | `"s3-static-app-250042023"` | no |
+|  [marketing-users](#input\_marketing-users) | n/a | `list(string)` | [  "Alice",  "Malory"] | no |
+|  [region](#input\_region) | n/a | `string` | `"us-east-1"` | no |
+|  [terraform-state](#input\_terraform-state) | terraform s3 state | `string` | `"staticwebsite-terraform"` | no |
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+|  [cloudfront-distribution](#output\_cloudfront-distribution) | n/a |
+|  [s3\_bucket\_name](#output\_s3\_bucket\_name) | Name of of website bucket |
+|  [s3\_bucket\_website\_endpoint](#output\_s3\_bucket\_website\_endpoint) | Website endpoint for the S3 bucket |
+
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

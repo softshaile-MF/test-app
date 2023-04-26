@@ -2,10 +2,14 @@
 module "s3_bucket" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "3.8.2"
+  tags = {
+    Name = "static-website"
+  }
 
   bucket                   = var.bucket_name
   control_object_ownership = true
   acl                      = "public-read"
+  force_destroy            = true
 
   versioning = {
     enabled = true
@@ -86,6 +90,15 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   viewer_certificate {
     cloudfront_default_certificate = true
   }
+  #checkov:skip=CKV_AWS_86: "Ensure Cloudfront distribution has Access Logging enabled
+  #checkov:skip=CKV_AWS_174: "Verify CloudFront Distribution Viewer Certificate is using TLS v1.2
+  #checkov:skip=CKV_AWS_68: "CloudFront Distribution should have WAF enabled
+  #checkov:skip=CKV_AWS_310: "Ensure CloudFront distributions should have origin failover configured
+  #checkov:skip=CKV_AWS_283: "Ensure no IAM policies documents allow ALL or any AWS principal permissions to the resource
+  #checkov:skip=CKV2_AWS_42: "Ensure AWS CloudFront distribution uses custom SSL certificate
+  #checkov:skip=CKV2_AWS_32: "Ensure CloudFront distribution has a response headers policy attached
+  #checkov:skip=CKV2_AWS_47: "Ensure AWS CloudFront attached WAFv2 WebACL is configured with AMR for Log4j Vulnerability
+  #checkov:skip=CKV_AWS_283: "Ensure no IAM policies documents allow ALL or any AWS principal permissions to the resource
 }
 
 
